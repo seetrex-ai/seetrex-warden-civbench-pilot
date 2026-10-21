@@ -1,0 +1,39 @@
+get_victory_progress calls by game turn, Ground Control (Babylon), Claude Opus 4.6. Rows: (1) the
+comparison game with Seetrex Warden; (2) the control game without Seetrex Warden, same agent,
+scenario and harness; other differences declared in the protocol (11.6); (3) the CivBench reference
+game steep-vermil-trebuchet-27, the highest rate of the 6 admissible Opus 4.6 Ground Control games
+at H = 255. One mark per get_victory_progress call at its turn tag: a filled circle is a counted
+call, a filled diamond a counted call that is the first one after a rejected end_turn, a hollow
+circle a call after H, which the rate does not count. Rate of a row: its counted calls over all its
+tool calls inside the window, the calls before the first one tagged > H: with Seetrex Warden
+21/4,236 = 0.496 %; without 4/3,728 = 0.107 %; reference 5/2,059 = 0.243 %. In row 1, one bar per
+end_turn rejected by Seetrex Warden (9; in each, rule R01 raised the obligation, a status check
+overdue when 20 or more turns have passed since the last status check, or since the start of the
+game, and rule R04 emitted the verdict: the ledger lists R01 and R04 for every rejection;
+turns_since_status_check >= 20 in warden_v2.json, whose text hashes to the ruleset_hash of every
+evaluation in the ledger; Seetrex Warden never says what to play). Seetrex Warden in row 1 was also
+three tools in the agent's list (commit, dispose, ledger), never called, whose descriptions say
+end_turn can be rejected; and one compaction summary echoed a rejection. Grid lines at multiples of
+20 turns; R01's clock restarts at each check, so the bars need not fall on the grid, and it is
+counted on Seetrex Warden's clock, the highest turn read in the game, which does not go back on a
+reload: the checks drawn at T168, T169 and T230 were at clock 171, 172 and 231, so the next bars
+fall 23 and 21 turns after the marks. 9 of the 21 counted queries are the first query after a
+rejection; the other 12 (12/4,236 = 0.283 %) are also above the reference at H = 255 (5/2,059 =
+0.243 %) and at every H from 140 to 255, at none from 121 to 139; against the uncut reference
+(10/3,179 = 0.315 %) they are below. Each mark is drawn at its own turn, at the lowest level free of
+marks fewer than 10 turns away, so that none hides another; the level carries no meaning. The shaded
+band starts at H + 0.5. Sources: rows 1-2, stream.jsonl of every take of each game (turn tag = the
+last turn read before the call, protocol 11.4; rejections from sesion.jsonl, the proxy ledger); row
+3, the turn column of tool_calls.parquet of civbench/civbench-v1, a different instrument: rebuilt
+with the tag of rows 1-2 over this game's own results, that column agrees on 4,382 of its 4,593
+calls with both tags known (95.41 %), is ahead on 187 and behind on 24 (protocol 11.4). Not drawn,
+beyond turn 280: row 3 turns 307, 306, 307. Limits: n = 1 per arm, no statistical inference (no
+p-values, no intervals), temporal order only, not causation; the trajectory of each game (when
+threats arrive, how many resumptions) is another possible cause of the difference; the two arms were
+not played at the same time; the reference was played with the paper's setup and rows 1-2 with ours
+(differences declared in the protocol, 11.6). Resumptions weigh on row 1 (17 resume messages in 18
+takes): of its 12 counted queries that are not forced, 4 are among the first 30 calls of their take
+(index < 30, in a take after the first) and another 4 at indices 46-48; the marks stacked at T129
+are takes 06, 07 and 09, each resumed at T129; those at T168-171 are takes 11, 12 and 13, resumed at
+T168, T171 and T169: different takes replaying the same turns after a reload; row 2: 7 in 9, and 1
+of its 4 counted queries is among the first 30 calls of its take.

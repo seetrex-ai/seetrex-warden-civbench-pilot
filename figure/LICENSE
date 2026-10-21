@@ -1,0 +1,15 @@
+LICENSE of this figure
+
+Figure 1 of the technical report "Seetrex Warden: an external obligation gate for a
+long-horizon LLM agent" (the files figura_babilonia.svg, figura_babilonia.png,
+figura_babilonia_680px.png and caption.txt in this folder) is licensed under the
+Creative Commons Attribution 4.0 International License (CC BY 4.0),
+https://creativecommons.org/licenses/by/4.0/.
+
+Copyright (c) 2026 Seetrex. Attribution: "Seetrex, Figure 1 of 'Seetrex Warden: an
+external obligation gate for a long-horizon LLM agent' (2026)", with a link to the
+report's DOI.
+
+The figure plots tool calls of games played on the CivBench harness and compares them
+with games of the CivBench dataset (civbench/civbench-v1, CC BY 4.0). No Civilization VI
+asset is reproduced in it.

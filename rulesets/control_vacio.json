@@ -1,0 +1,5 @@
+{
+  "id": "control_vacio",
+  "description": "Negative control, sanity mutant A (DISENO section 6.1): an empty ruleset must produce zero interventions. If it does not, the instrument is not reading the ruleset at all.",
+  "rules": []
+}

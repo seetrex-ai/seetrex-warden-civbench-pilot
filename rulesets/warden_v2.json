@@ -1,0 +1,57 @@
+{
+  "id": "warden_v2",
+  "description": "Warden ruleset v2 (T2.7). Same four rules and the same rule ids as v1; nothing in the conditions changes. What changes is what the proxy feeds R02 with and how R01's counter starts: (1) the notice fact is raised also by the game's own notifications about a foreign civ's win, in a closed list measured over the corpus, the demo and the Rome game (tools/fase0_extraer_hechos.py, GAME_NOTICE_LINES), not only by the harness's six templates; (2) the cadence counter of R01 is inherited per GAME from the previous session's sealed ledger (civ/proxy.py --continua), not reset per agent session; (3) the literal 20 of R01 is still the study playbook's own request [PAPER], not ours. Every rule still says what to LOOK AT or what to CLOSE, never what MOVE to make (DISENO section 4). v1 is kept for the Phase 0 replay. R04 is the verdict, and it lives here rather than in the replay code so that the ruleset hash anchors what counts as an intervention.",
+  "rules": [
+    {
+      "id": "R01_status_check_cadence",
+      "name": "Status check overdue by the cadence the playbook asks for",
+      "conditions": [
+        { "fact_id": "turns_since_status_check", "operator": "Ge", "value": 20, "negated": false }
+      ],
+      "antecedents": [],
+      "consequent": "obligation_status_check_overdue",
+      "consequent_value": true,
+      "priority": 900,
+      "condition_groups": []
+    },
+    {
+      "id": "R02_status_check_after_notice",
+      "name": "The harness or the game raised a notice and the agent has not looked since",
+      "conditions": [
+        { "fact_id": "threat_notice_present", "operator": "Eq", "value": true, "negated": false },
+        { "fact_id": "status_checked_since_threat", "operator": "Eq", "value": false, "negated": false }
+      ],
+      "antecedents": [],
+      "consequent": "obligation_status_check_after_notice",
+      "consequent_value": true,
+      "priority": 950,
+      "condition_groups": []
+    },
+    {
+      "id": "R03_commitment_overdue",
+      "name": "A commitment the agent made is past its due turn and not closed",
+      "conditions": [
+        { "fact_id": "overdue_commitments", "operator": "Ge", "value": 1, "negated": false }
+      ],
+      "antecedents": [],
+      "consequent": "obligation_commitment_overdue",
+      "consequent_value": true,
+      "priority": 990,
+      "condition_groups": []
+    },
+    {
+      "id": "R04_verdict",
+      "name": "The turn does not close while an obligation is overdue",
+      "conditions": [],
+      "antecedents": [],
+      "consequent": "gate_blocks_turn",
+      "consequent_value": true,
+      "priority": 100,
+      "condition_groups": [
+        [ { "fact_id": "obligation_status_check_overdue", "operator": "Eq", "value": true, "negated": false } ],
+        [ { "fact_id": "obligation_status_check_after_notice", "operator": "Eq", "value": true, "negated": false } ],
+        [ { "fact_id": "obligation_commitment_overdue", "operator": "Eq", "value": true, "negated": false } ]
+      ]
+    }
+  ]
+}
